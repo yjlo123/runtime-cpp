@@ -30,7 +30,7 @@ int main() {
     for (const auto &token : tokenLine) {
       cout << token << " | ";
     }
-    std::cout << std::endl;
+    cout << endl;
   }
   cout << "============" << endl;
 

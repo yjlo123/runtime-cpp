@@ -1,4 +1,5 @@
 #include "Tokenizer.h"
+#include <stdexcept>
 
 using namespace std;
 
@@ -6,23 +7,25 @@ Tokenizer::Tokenizer(const string &src) : src(src) {}
 
 vector<vector<string>> Tokenizer::tokenize() {
   vector<vector<string>> tokens;
-  vector<string> line;
   string token;
+
+  tokens.push_back(vector<string>());
 
   for (size_t i = 0; i < src.length(); ++i) {
     char c = src[i];
 
-    if (c == '\n' || c == ' ') {
+    if (c == '\n' || c == '\r' || c == ' ') {
       // end of a token
       if (!token.empty()) {
-        line.push_back(token);
+        tokens.back().push_back(token);
       }
-      token.clear();
+      
       // end of a line
       if (c == '\n') {
-        tokens.push_back(line);
-        line.clear();
+        tokens.push_back(vector<string>());
       }
+
+      token = "";
     } else if (c == '\'') {
       // string
       char quote = c;
@@ -73,10 +76,10 @@ vector<vector<string>> Tokenizer::tokenize() {
   }
 
   if (!token.empty()) {
-    line.push_back(token);
+    tokens.back().push_back(token);
   }
-  if (!line.empty()) {
-    tokens.push_back(line);
+  if (tokens.back().empty()) {
+    tokens.pop_back();
   }
 
   return tokens;
