@@ -11,10 +11,19 @@ void Evaluator::evaluate(unordered_map<string, int> &env) {
   for (const auto &line : program) {
     if (line.empty())
       continue;
-    if (line[0] == "let") {
+    string cmd = line[0];
+    if (cmd == "let") {
       env[line[1]] = stoi(line[2]);
-    } else if (line[0] == "print") {
-      cout << env.at(line[1]) << endl;
+    } else if (cmd == "add") {
+      // TODO
+      env[line[1]] = stoi(line[3]);
+    } else if (cmd == "prt") {
+      string content = line[1];
+      if (content[0] == '$') {
+        cout << env.at(content.substr(1)) << endl;
+      } else {
+        cout << content << endl;
+      }
     }
   }
 }
